@@ -18,13 +18,24 @@ day26-mcp/
 │   ├── weather_server.py
 │   └── weather_client.py
 │
-└── 03-production/           ← Bước 3: Auth, Tool Registry, Versioning
+│
+├── 03-production/           ← Bước 3: Auth, Tool Registry, Versioning
+│   ├── README.md
+│   ├── auth_server.py
+│   ├── auth_client.py
+│   ├── registry.json
+│   ├── registry_client.py
+│   └── versioned_server.py
+│
+└── 04-lab/                  ← Bước 4: Weather Agent (Google ADK + FastMCP Remote Server)
     ├── README.md
-    ├── auth_server.py
-    ├── auth_client.py
-    ├── registry.json
-    ├── registry_client.py
-    └── versioned_server.py
+    ├── mcp-server/          ← FastMCP Server (WeatherAPI + Streamable HTTP + stdio)
+    │   ├── README.md        ← Hướng dẫn chi tiết, Input/Output, Đăng ký Claude Code
+    │   └── weather.py
+    └── mcp-client/          ← ADK Agent Client & Web Interface
+        ├── README.md
+        ├── verify_setup.py
+        └── weather_agent/
 ```
 
 ## Quick start
@@ -47,6 +58,12 @@ python auth_client.py              # terminal 2
 
 # Production — Tool Registry
 cd 03-production && python registry_client.py
+
+# Lab 04 — Weather Agent (FastMCP Server + ADK Web UI)
+# Terminal 1 (Server):
+cd 04-lab/mcp-server && uv run python weather.py
+# Terminal 2 (Client Web UI):
+cd 04-lab/mcp-client && uv run adk web
 ```
 
 ---
