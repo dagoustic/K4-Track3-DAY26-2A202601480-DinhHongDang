@@ -8,8 +8,11 @@ from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
 
+from pathlib import Path
+
 async def main() -> None:
-    params = StdioServerParameters(command=sys.executable, args=["versioned_server.py"])
+    server_path = str(Path(__file__).parent / "versioned_server.py")
+    params = StdioServerParameters(command=sys.executable, args=[server_path])
 
     async with stdio_client(params) as (read, write):
         async with ClientSession(read, write) as session:

@@ -82,21 +82,21 @@ def check_mcp_server():
     """Check if MCP server is accessible"""
     print("\n🔍 Checking MCP server connectivity...")
     
-    server_url = "https://weather-mcp-server-oze7nwnjba-as.a.run.app"
+    server_url = os.getenv("MCP_SERVER_URL", "http://localhost:8085/mcp")
     
     try:
         import httpx
         import asyncio
         
         async def test_connection():
-            async with httpx.AsyncClient() as client:
-                response = await client.get(server_url, timeout=10.0)
+            async with httpx.AsyncClient(headers={"Accept": "text/event-stream, application/json, */*"}) as client:
+                response = await client.get(server_url, timeout=5.0)
                 return response.status_code
         
         status_code = asyncio.run(test_connection())
         
-        if status_code in [200, 404]:  # 404 is expected for GET on MCP endpoint
-            print(f"✅ MCP server reachable at {server_url}")
+        if status_code in [200, 400, 404, 405, 406]:  # FastMCP returns 400/404/405/406 for direct GET probe without SSE handshake
+            print(f"✅ MCP server reachable at {server_url} (HTTP {status_code})")
             return True
         else:
             print(f"⚠️  MCP server returned status {status_code}")

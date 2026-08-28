@@ -20,9 +20,12 @@ from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
 
+from pathlib import Path
+
 async def main() -> None:
+    server_path = str(Path(__file__).parent / "weather_server.py")
     # Dùng đúng interpreter đang chạy client (tránh lỗi "python" không tồn tại)
-    params = StdioServerParameters(command=sys.executable, args=["weather_server.py"])
+    params = StdioServerParameters(command=sys.executable, args=[server_path])
 
     async with stdio_client(params) as (read, write):
         async with ClientSession(read, write) as session:
